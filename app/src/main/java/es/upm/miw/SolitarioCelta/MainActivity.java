@@ -7,21 +7,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-	JuegoCelta mJuego;
+    public static final String LOG_TAG = "CELTA_LOG";
+
+    private JuegoCelta mJuego;
     private final String CLAVE_TABLERO = "TABLERO_SOLITARIO_CELTA";
 
-	private final int[][] ids = {
-		{       0,        0, R.id.p02, R.id.p03, R.id.p04,        0,        0},
-        {       0,        0, R.id.p12, R.id.p13, R.id.p14,        0,        0},
-        {R.id.p20, R.id.p21, R.id.p22, R.id.p23, R.id.p24, R.id.p25, R.id.p26},
-        {R.id.p30, R.id.p31, R.id.p32, R.id.p33, R.id.p34, R.id.p35, R.id.p36},
-        {R.id.p40, R.id.p41, R.id.p42, R.id.p43, R.id.p44, R.id.p45, R.id.p46},
-        {       0,        0, R.id.p52, R.id.p53, R.id.p54,        0,        0},
-        {       0,        0, R.id.p62, R.id.p63, R.id.p64,        0,        0}
-	};
+    private final int[][] ids = {
+            {0, 0, R.id.p02, R.id.p03, R.id.p04, 0, 0},
+            {0, 0, R.id.p12, R.id.p13, R.id.p14, 0, 0},
+            {R.id.p20, R.id.p21, R.id.p22, R.id.p23, R.id.p24, R.id.p25, R.id.p26},
+            {R.id.p30, R.id.p31, R.id.p32, R.id.p33, R.id.p34, R.id.p35, R.id.p36},
+            {R.id.p40, R.id.p41, R.id.p42, R.id.p43, R.id.p44, R.id.p45, R.id.p46},
+            {0, 0, R.id.p52, R.id.p53, R.id.p54, 0, 0},
+            {0, 0, R.id.p62, R.id.p63, R.id.p64, 0, 0}
+    };
+
+    private final JuegoManager saveManager = new JuegoManager(this);
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +100,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SCeltaPreferences.class));
                 return true;
             case R.id.reinitialize:
-                ReinitializeDialogFragment reinitializeDialogFragment = new ReinitializeDialogFragment();
-                reinitializeDialogFragment.show(getFragmentManager(), "REINITIZE DIALOG");
+                new ReinitializeDialogFragment().show(getFragmentManager(), "REINITIZE DIALOG");
+                return true;
+            case R.id.save:
+                save(mJuego);
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void save(JuegoCelta juegoCelta) {
+        if (saveManager.save(juegoCelta)) {
+            Toast.makeText(
+                    this,
+                    getString(R.string.savedGameText),
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
     }
 }
