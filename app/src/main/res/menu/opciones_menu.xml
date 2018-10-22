@@ -19,6 +19,11 @@
         android:title="@string/saveText"/>
 
     <item
+        android:id="@+id/restore"
+        android:orderInCategory="120"
+        android:title="@string/restoreText"/>
+
+    <item
         android:id="@+id/preferences"
         android:icon="@android:drawable/ic_menu_preferences"
         android:iconTint="@android:color/background_dark"

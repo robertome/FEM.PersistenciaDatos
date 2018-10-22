@@ -27,5 +27,8 @@
     <string name="defaultSaveFile">solitarioCelta.save</string>
     <string name="savedGameText">Partida guardada</string>
 
+    <!-- Diálog Recuperar -->
+    <string name="restoreText">Recuperar partida</string>
+    <string name="restoreDialogText">¿Desea recuperar la partida?</string>
 
 </resources>
