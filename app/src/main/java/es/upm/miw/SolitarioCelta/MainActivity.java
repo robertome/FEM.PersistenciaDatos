@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             {0, 0, R.id.p62, R.id.p63, R.id.p64, 0, 0}
     };
 
-    private final JuegoManager saveManager = new JuegoManager(this);
+    private final JuegoManager juegoManager = new JuegoManager(this);
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,19 +104,29 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.save:
                 save(mJuego);
-
+                return true;
+            case R.id.restore:
+                new RestoreDialogFragment().show(getFragmentManager(), "RESTORE DIALOG");
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void save(JuegoCelta juegoCelta) {
-        if (saveManager.save(juegoCelta)) {
+        if (juegoManager.save(juegoCelta)) {
             Toast.makeText(
                     this,
                     getString(R.string.savedGameText),
                     Toast.LENGTH_SHORT
             ).show();
+        }
+    }
+
+    public void restaurarPartida() {
+        JuegoCelta juegoCelta = juegoManager.load();
+        if (juegoCelta != null) {
+            this.mJuego = juegoCelta;
+            mostrarTablero();
         }
     }
 }
