@@ -9,6 +9,15 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="@string/reinitializeText"/>
+
+    <item
+        android:id="@+id/save"
+        android:icon="@android:drawable/ic_menu_save"
+        android:iconTint="@android:color/background_dark"
+        android:orderInCategory="110"
+        android:showAsAction="always"
+        android:title="@string/saveText"/>
+
     <item
         android:id="@+id/preferences"
         android:icon="@android:drawable/ic_menu_preferences"
