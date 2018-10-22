@@ -12,6 +12,9 @@
     <string name="secondCategoryPrefTitle">Ajustes del juego</string>
     <string name="preferencesText">Ajustes</string>
 
+    <string name="reinitializeText">Reiniciar</string>
+    <string name="reinitializeDialogText">¿Desea reiniciar la partida?</string>
+
     <!-- Diálogo Final -->
     <string name="txtDialogoFinalTitulo">Fin del juego</string>
     <string name="txtDialogoFinalPregunta">¿Quiere jugar otra partida?</string>
