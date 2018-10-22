@@ -63,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
                 }
     }
 
+    public void reiniciarTablero() {
+        mJuego.reiniciar();
+        mostrarTablero();
+    }
+
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(CLAVE_TABLERO, mJuego.serializaTablero());
         super.onSaveInstanceState(outState);
@@ -88,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.preferences:
                 startActivity(new Intent(this, SCeltaPreferences.class));
+                return true;
+            case R.id.reinitialize:
+                ReinitializeDialogFragment reinitializeDialogFragment = new ReinitializeDialogFragment();
+                reinitializeDialogFragment.show(getFragmentManager(), "REINITIZE DIALOG");
                 return true;
         }
         return super.onOptionsItemSelected(item);
