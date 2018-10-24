@@ -16,6 +16,7 @@ import es.upm.miw.SolitarioCelta.db.entities.GameResult;
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = "CELTA_LOG";
+    public static final String DEFAULT_PLAYER = "DEFAULT_PLAYER";
     private static final String CLAVE_TABLERO = "TABLERO_SOLITARIO_CELTA";
 
     private JuegoCelta mJuego;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             {0, 0, R.id.p62, R.id.p63, R.id.p64, 0, 0}
     };
 
-    private final GameRepository gameRepository = new GameRepository(this);
+    private GameRepository gameRepository;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +41,16 @@ public class MainActivity extends AppCompatActivity {
         mJuego = new JuegoCelta();
         mostrarTablero();
 
-        /*SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        playerName = sharedPref.getString(getResources().getString(R.string.preferencesKeyPlayerName), null);
+        gameRepository = new GameRepository(getApplicationContext());
 
-        if (playerName == null) {
+        if (recoverPlayerName(null) == null) {
             showPreferencias();
-        }*/
+        }
+    }
+
+    private String recoverPlayerName(String defaultPlayerName) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPref.getString(getResources().getString(R.string.preferencesKeyPlayerName), defaultPlayerName);
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 salvarPartida(mJuego);
                 return true;
             case R.id.restore:
+                //TODO: Solo restaurar si existe partida guardada
                 new RestoreDialogFragment().show(getFragmentManager(), "RESTORE DIALOG");
                 return true;
         }
@@ -106,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         mostrarTablero();
 
         if (mJuego.juegoTerminado()) {
-            gameRepository.save(new GameResult(playerName, mJuego.contarFichas()));
+            gameRepository.save(new GameResult(recoverPlayerName(DEFAULT_PLAYER), mJuego.contarFichas()));
 
             new AlertDialogFragment().show(getFragmentManager(), "ALERT DIALOG");
         }

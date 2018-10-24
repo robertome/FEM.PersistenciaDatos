@@ -86,6 +86,7 @@ public class GameRepository {
     }
 
     public void save(GameResult gameResult) {
+        Log.i(LOG_TAG, "Saving game result: " + gameResult);
         gameResultDao.save(gameResult);
         Log.i(LOG_TAG, "Games results: \n" + gameResultDao.readAll());
     }
