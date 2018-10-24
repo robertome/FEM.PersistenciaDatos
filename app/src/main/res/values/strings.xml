@@ -31,4 +31,6 @@
     <string name="restoreText">Recuperar partida</string>
     <string name="restoreDialogText">¿Desea recuperar la partida?</string>
 
+    <string name="preferencesKeyPlayerName">KEY_PLAYER_NAME</string>
+
 </resources>
