@@ -8,17 +8,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import es.upm.miw.SolitarioCelta.db.AppDatabase;
+import es.upm.miw.SolitarioCelta.db.daos.GameResultDao;
+import es.upm.miw.SolitarioCelta.db.entities.GameResult;
+
 import static es.upm.miw.SolitarioCelta.MainActivity.LOG_TAG;
 
-public class JuegoManager {
+public class GameRepository {
 
     private Context context;
+    private GameResultDao gameResultDao;
 
-    JuegoManager(Context context) {
+    GameRepository(Context context) {
         this.context = context;
+        this.gameResultDao = AppDatabase.getDatabase(context).gameResultDao();
     }
 
-    public boolean save(JuegoCelta juegoCelta) {
+    public boolean saveGameState(JuegoCelta juegoCelta) {
         FileOutputStream fos = null;
         try {
             fos = context.openFileOutput(savedFilePath(), Context.MODE_PRIVATE);
@@ -39,7 +45,7 @@ public class JuegoManager {
         return false;
     }
 
-    public JuegoCelta load() {
+    public JuegoCelta loadGameState() {
         BufferedReader fin = null;
         InputStreamReader is = null;
         try {
@@ -78,4 +84,11 @@ public class JuegoManager {
     private String savedFilePath() {
         return context.getResources().getString(R.string.defaultSaveFile);
     }
+
+    public void save(GameResult gameResult) {
+        Log.i(LOG_TAG, "Saving game result: " + gameResult);
+        gameResultDao.save(gameResult);
+        Log.i(LOG_TAG, "Games results: \n" + gameResultDao.readAll());
+    }
+
 }

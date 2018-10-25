@@ -111,7 +111,6 @@ class JuegoCelta {
      * @return valor lógico
      */
     public boolean juegoTerminado() {
-
         for (int i = 0; i < TAMANIO; i++)
             for (int j = 0; j < TAMANIO; j++)
                 if (tablero[i][j] == 1) {
@@ -160,5 +159,18 @@ class JuegoCelta {
         tablero[TAMANIO / 2][TAMANIO / 2] = 0;   // posición central
 
         estadoJuego = Estado.ESTADO_SELECCION_FICHA;
+	}
+
+	public int contarFichas() {
+		int numeroFichas = 0;
+		for (int i = 0; i < TAMANIO; i++) {
+			for (int j = 0; j < TAMANIO; j++) {
+				if (tablero[i][j] == 1) {
+					numeroFichas++;
+				}
+			}
+		}
+
+		return numeroFichas;
 	}
 }

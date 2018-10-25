@@ -1,7 +1,9 @@
 package es.upm.miw.SolitarioCelta;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,12 +11,16 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import es.upm.miw.SolitarioCelta.db.entities.GameResult;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = "CELTA_LOG";
+    public static final String DEFAULT_PLAYER = "DEFAULT_PLAYER";
+    private static final String CLAVE_TABLERO = "TABLERO_SOLITARIO_CELTA";
 
     private JuegoCelta mJuego;
-    private final String CLAVE_TABLERO = "TABLERO_SOLITARIO_CELTA";
+    private String playerName;
 
     private final int[][] ids = {
             {0, 0, R.id.p02, R.id.p03, R.id.p04, 0, 0},
@@ -26,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             {0, 0, R.id.p62, R.id.p63, R.id.p64, 0, 0}
     };
 
-    private final JuegoManager juegoManager = new JuegoManager(this);
+    private GameRepository gameRepository;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,43 +40,18 @@ public class MainActivity extends AppCompatActivity {
 
         mJuego = new JuegoCelta();
         mostrarTablero();
-    }
 
-    /**
-     * Se ejecuta al pulsar una posición
-     *
-     * @param v Vista de la posición pulsada
-     */
-    public void posicionPulsada(View v) {
-        String resourceName = getResources().getResourceEntryName(v.getId());
-        int i = resourceName.charAt(1) - '0';
-        int j = resourceName.charAt(2) - '0';
+        gameRepository = new GameRepository(getApplicationContext());
+        gameRepository.save(new GameResult(recoverPlayerName(DEFAULT_PLAYER), mJuego.contarFichas()));
 
-        mJuego.jugar(i, j);
-
-        mostrarTablero();
-        if (mJuego.juegoTerminado()) {
-            new AlertDialogFragment().show(getFragmentManager(), "ALERT DIALOG");
+        if (recoverPlayerName(null) == null) {
+            showPreferencias();
         }
     }
 
-    /**
-     * Visualiza el tablero
-     */
-    public void mostrarTablero() {
-        RadioButton button;
-
-        for (int i = 0; i < JuegoCelta.TAMANIO; i++)
-            for (int j = 0; j < JuegoCelta.TAMANIO; j++)
-                if (ids[i][j] != 0) {
-                    button = findViewById(ids[i][j]);
-                    button.setChecked(mJuego.obtenerFicha(i, j) == 1);
-                }
-    }
-
-    public void reiniciarTablero() {
-        mJuego.reiniciar();
-        mostrarTablero();
+    private String recoverPlayerName(String defaultPlayerName) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPref.getString(getResources().getString(R.string.preferencesKeyPlayerName), defaultPlayerName);
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -97,23 +78,69 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, About.class));
                 return true;
             case R.id.preferences:
-                startActivity(new Intent(this, SCeltaPreferences.class));
+                showPreferencias();
                 return true;
             case R.id.reinitialize:
                 new ReinitializeDialogFragment().show(getFragmentManager(), "REINITIZE DIALOG");
                 return true;
             case R.id.save:
-                save(mJuego);
+                salvarPartida(mJuego);
                 return true;
             case R.id.restore:
+                //TODO: Solo restaurar si existe partida guardada
                 new RestoreDialogFragment().show(getFragmentManager(), "RESTORE DIALOG");
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void save(JuegoCelta juegoCelta) {
-        if (juegoManager.save(juegoCelta)) {
+    private void showPreferencias() {
+        startActivity(new Intent(this, SCeltaPreferences.class));
+    }
+
+    /**
+     * Se ejecuta al pulsar una posición
+     *
+     * @param v Vista de la posición pulsada
+     */
+    public void posicionPulsada(View v) {
+        String resourceName = getResources().getResourceEntryName(v.getId());
+        int i = resourceName.charAt(1) - '0';
+        int j = resourceName.charAt(2) - '0';
+
+        mJuego.jugar(i, j);
+
+        mostrarTablero();
+
+        if (mJuego.juegoTerminado()) {
+            gameRepository.save(new GameResult(recoverPlayerName(DEFAULT_PLAYER), mJuego.contarFichas()));
+
+            new AlertDialogFragment().show(getFragmentManager(), "ALERT DIALOG");
+        }
+    }
+
+    /**
+     * Visualiza el tablero
+     */
+    public void mostrarTablero() {
+        RadioButton button;
+        for (int i = 0; i < JuegoCelta.TAMANIO; i++) {
+            for (int j = 0; j < JuegoCelta.TAMANIO; j++) {
+                if (ids[i][j] != 0) {
+                    button = findViewById(ids[i][j]);
+                    button.setChecked(mJuego.obtenerFicha(i, j) == 1);
+                }
+            }
+        }
+    }
+
+    public void reiniciarTablero() {
+        mJuego.reiniciar();
+        mostrarTablero();
+    }
+
+    private void salvarPartida(JuegoCelta juegoCelta) {
+        if (gameRepository.saveGameState(juegoCelta)) {
             Toast.makeText(
                     this,
                     getString(R.string.savedGameText),
@@ -123,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void restaurarPartida() {
-        JuegoCelta juegoCelta = juegoManager.load();
+        JuegoCelta juegoCelta = gameRepository.loadGameState();
         if (juegoCelta != null) {
             this.mJuego = juegoCelta;
             mostrarTablero();
