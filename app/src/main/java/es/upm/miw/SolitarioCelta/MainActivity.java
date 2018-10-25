@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mostrarTablero();
 
         gameRepository = new GameRepository(getApplicationContext());
+        gameRepository.save(new GameResult(recoverPlayerName(DEFAULT_PLAYER), mJuego.contarFichas()));
 
         if (recoverPlayerName(null) == null) {
             showPreferencias();
