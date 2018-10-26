@@ -36,6 +36,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        </application>
+        <activity android:name=".GameResultsActivity"
+            android:label="@string/bestResultsText"
+            android:parentActivityName=".MainActivity"
+            />
+    </application>
 
 </manifest>

@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         mostrarTablero();
 
         gameRepository = new GameRepository(getApplicationContext());
-        gameRepository.save(new GameResult(recoverPlayerName(DEFAULT_PLAYER), mJuego.contarFichas()));
 
         if (recoverPlayerName(null) == null) {
             showPreferencias();
@@ -75,28 +74,49 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuAbout:
-                startActivity(new Intent(this, About.class));
+                showAbout();
                 return true;
             case R.id.preferences:
                 showPreferencias();
                 return true;
             case R.id.reinitialize:
-                new ReinitializeDialogFragment().show(getFragmentManager(), "REINITIZE DIALOG");
+                showReinitialize();
                 return true;
             case R.id.save:
                 salvarPartida(mJuego);
                 return true;
             case R.id.restore:
-                //TODO: Solo restaurar si existe partida guardada
-                new RestoreDialogFragment().show(getFragmentManager(), "RESTORE DIALOG");
+                showRestore();
+                return true;
+            case R.id.results:
+                showGameResults();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void showAbout() {
+        startActivity(new Intent(this, About.class));
+    }
+
     private void showPreferencias() {
         startActivity(new Intent(this, SCeltaPreferences.class));
     }
+
+    private void showReinitialize() {
+        new ReinitializeDialogFragment().show(getFragmentManager(), "REINITIZE DIALOG");
+    }
+
+    private void showRestore() {
+        //TODO: Solo restaurar si existe partida guardada
+        new RestoreDialogFragment().show(getFragmentManager(), "RESTORE DIALOG");
+    }
+
+    private void showGameResults() {
+        startActivity(new Intent(this, GameResultsActivity.class));
+    }
+
 
     /**
      * Se ejecuta al pulsar una posición

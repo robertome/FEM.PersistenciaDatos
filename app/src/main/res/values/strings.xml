@@ -31,6 +31,15 @@
     <string name="restoreText">Recuperar partida</string>
     <string name="restoreDialogText">¿Desea recuperar la partida?</string>
 
+    <!-- Mejores Resultados -->
+    <string name="bestResultsText">Mejores resultados</string>
+    <string name="bestResultsDialogText">¿Desea eliminar los resultados de las partidas?</string>
+    <string name="tokensHeader">Fichas</string>
+    <string name="dateHeader">Fecha</string>
+    <string name="playerNameHeader">Jugador</string>
+
+
     <string name="preferencesKeyPlayerName">KEY_PLAYER_NAME</string>
+
 
 </resources>
