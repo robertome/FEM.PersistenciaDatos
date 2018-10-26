@@ -10,13 +10,13 @@ import java.util.Date;
 @Entity
 public class GameResult {
     @PrimaryKey(autoGenerate = true)
-    public Integer id;
+    private Integer id;
     @NonNull
-    public String playerName;
+    private String playerName;
     @NonNull
-    public Date date = new Date();
+    private Date date = new Date();
     @NonNull
-    public Integer tokensNumber;
+    private Integer tokensNumber;
 
     public GameResult(@NonNull String playerName, @NonNull Integer tokensNumber) {
         this.playerName = playerName;
