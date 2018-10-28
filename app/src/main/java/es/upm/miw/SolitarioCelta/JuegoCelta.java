@@ -1,9 +1,8 @@
 package es.upm.miw.SolitarioCelta;
 
 class JuegoCelta {
-	static final int TAMANIO = 7;
+    static final int TAMANIO = 7;
     private static final int NUM_MOVIMIENTOS = 4;
-	private int[][] tablero;
     private static final int[][] TABLERO_INICIAL = { // Posiciones válidas del tablero
             {0, 0, 1, 1, 1, 0, 0},
             {0, 0, 1, 1, 1, 0, 0},
@@ -14,46 +13,43 @@ class JuegoCelta {
             {0, 0, 1, 1, 1, 0, 0}
     };
     private static final int[][] desplazamientos = {
-            { 0,  2},   // Dcha
-            { 0, -2},   // Izda
-            { 2,  0},   // Abajo
-            {-2,  0}    // Arriba
+            {0, 2},   // Dcha
+            {0, -2},   // Izda
+            {2, 0},   // Abajo
+            {-2, 0}    // Arriba
     };
+    private int[][] tablero;
     private int iSeleccionada, jSeleccionada;   // coordenadas origen ficha
-	private int iSaltada, jSaltada;             // coordenadas ficha sobre la que se hace el movimiento
-
-	private enum Estado {
-		ESTADO_SELECCION_FICHA, ESTADO_SELECCION_DESTINO, ESTADO_TERMINADO
-	}
-
-	private Estado estadoJuego;
+    private int iSaltada, jSaltada;             // coordenadas ficha sobre la que se hace el movimiento
+    private Estado estadoJuego;
 
     /**
      * Constructor
      * Inicializa el tablero y el estado del miJuego
      */
     public JuegoCelta() {
-		tablero = new int[TAMANIO][TAMANIO];
+        tablero = new int[TAMANIO][TAMANIO];
         for (int i = 0; i < TAMANIO; i++)
-        	System.arraycopy(TABLERO_INICIAL[i], 0, tablero[i], 0, TAMANIO);
+            System.arraycopy(TABLERO_INICIAL[i], 0, tablero[i], 0, TAMANIO);
         tablero[TAMANIO / 2][TAMANIO / 2] = 0;   // posición central
 
-		estadoJuego = Estado.ESTADO_SELECCION_FICHA;
-	}
+        estadoJuego = Estado.ESTADO_SELECCION_FICHA;
+    }
 
     /**
      * Devuelve el contenido de una posición del tablero
+     *
      * @param i fila del tablero
      * @param j columna del tablero
      * @return contenido
      */
-	protected int obtenerFicha(int i, int j) {
-		return tablero[i][j];
-	}
+    protected int obtenerFicha(int i, int j) {
+        return tablero[i][j];
+    }
 
     /**
      * Determina si el movimiento (i1, j1) a (i2, j2) es aceptable
-	 *
+     *
      * @param i1 fila origen
      * @param j1 columna origen
      * @param i2 fila destino
@@ -78,36 +74,36 @@ class JuegoCelta {
 
     /**
      * Recibe las coordenadas de la posición pulsada y dependiendo del estado, realiza la acción
-	 *
+     *
      * @param iPulsada coordenada fila
      * @param jPulsada coordenada columna
      */
-	public void jugar(int iPulsada, int jPulsada) {
-		if (estadoJuego == Estado.ESTADO_SELECCION_FICHA) {
-			iSeleccionada = iPulsada;
-			jSeleccionada = jPulsada;
-			estadoJuego = Estado.ESTADO_SELECCION_DESTINO;
-		} else if (estadoJuego == Estado.ESTADO_SELECCION_DESTINO) {
-			if (movimientoAceptable(iSeleccionada, jSeleccionada, iPulsada, jPulsada)) {
-				estadoJuego = Estado.ESTADO_SELECCION_FICHA;
+    public void jugar(int iPulsada, int jPulsada) {
+        if (estadoJuego == Estado.ESTADO_SELECCION_FICHA) {
+            iSeleccionada = iPulsada;
+            jSeleccionada = jPulsada;
+            estadoJuego = Estado.ESTADO_SELECCION_DESTINO;
+        } else if (estadoJuego == Estado.ESTADO_SELECCION_DESTINO) {
+            if (movimientoAceptable(iSeleccionada, jSeleccionada, iPulsada, jPulsada)) {
+                estadoJuego = Estado.ESTADO_SELECCION_FICHA;
 
                 // Actualizar tablero
-				tablero[iSeleccionada][jSeleccionada] = 0;
-				tablero[iSaltada][jSaltada] = 0;
-				tablero[iPulsada][jPulsada] = 1;
+                tablero[iSeleccionada][jSeleccionada] = 0;
+                tablero[iSaltada][jSaltada] = 0;
+                tablero[iPulsada][jPulsada] = 1;
 
-				if (juegoTerminado())
-					estadoJuego = Estado.ESTADO_TERMINADO;
-			} else { // El movimiento no es aceptable, la última ficha pasa a ser la seleccionada
-				iSeleccionada = iPulsada;
-				jSeleccionada = jPulsada;
-			}
-		}
-	}
+                if (juegoTerminado())
+                    estadoJuego = Estado.ESTADO_TERMINADO;
+            } else { // El movimiento no es aceptable, la última ficha pasa a ser la seleccionada
+                iSeleccionada = iPulsada;
+                jSeleccionada = jPulsada;
+            }
+        }
+    }
 
     /**
      * Determina si el miJuego ha terminado (no se puede realizar ningún movimiento)
-	 *
+     *
      * @return valor lógico
      */
     public boolean juegoTerminado() {
@@ -126,51 +122,55 @@ class JuegoCelta {
         return true;
     }
 
-	/**
-	 * Serializa el tablero, devolviendo una cadena de 7x7 caracteres (dígitos 0 o 1)
-	 *
-	 * @return tablero serializado
+    /**
+     * Serializa el tablero, devolviendo una cadena de 7x7 caracteres (dígitos 0 o 1)
+     *
+     * @return tablero serializado
      */
-	public String serializaTablero() {
-		StringBuilder str = new StringBuilder();
-		for (int i = 0; i < TAMANIO; i++)
-			for (int j = 0; j < TAMANIO; j++)
-				str.append(tablero[i][j]);
-		return str.toString();
-	}
-
-	/**
-	 * Recupera el estado del tablero a partir de su representación serializada
-	 *
-	 * @param str representación del tablero
-     */
-	public void deserializaTablero(String str) {
-		for (int i = 0, cont = 0; i < TAMANIO; i++)
-			for (int j = 0; j < TAMANIO; j++)
-				tablero[i][j] = str.charAt(cont++) - '0';
-	}
-
-	/**
-	 * Recupera el miJuego a su estado inicial
-	 */
-	public void reiniciar() {
+    public String serializaTablero() {
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < TAMANIO; i++)
-			System.arraycopy(TABLERO_INICIAL[i], 0, tablero[i], 0, TAMANIO);
+            for (int j = 0; j < TAMANIO; j++)
+                str.append(tablero[i][j]);
+        return str.toString();
+    }
+
+    /**
+     * Recupera el estado del tablero a partir de su representación serializada
+     *
+     * @param str representación del tablero
+     */
+    public void deserializaTablero(String str) {
+        for (int i = 0, cont = 0; i < TAMANIO; i++)
+            for (int j = 0; j < TAMANIO; j++)
+                tablero[i][j] = str.charAt(cont++) - '0';
+    }
+
+    /**
+     * Recupera el miJuego a su estado inicial
+     */
+    public void reiniciar() {
+        for (int i = 0; i < TAMANIO; i++)
+            System.arraycopy(TABLERO_INICIAL[i], 0, tablero[i], 0, TAMANIO);
         tablero[TAMANIO / 2][TAMANIO / 2] = 0;   // posición central
 
         estadoJuego = Estado.ESTADO_SELECCION_FICHA;
-	}
+    }
 
-	public int contarFichas() {
-		int numeroFichas = 0;
-		for (int i = 0; i < TAMANIO; i++) {
-			for (int j = 0; j < TAMANIO; j++) {
-				if (tablero[i][j] == 1) {
-					numeroFichas++;
-				}
-			}
-		}
+    public int contarFichas() {
+        int numeroFichas = 0;
+        for (int i = 0; i < TAMANIO; i++) {
+            for (int j = 0; j < TAMANIO; j++) {
+                if (tablero[i][j] == 1) {
+                    numeroFichas++;
+                }
+            }
+        }
 
-		return numeroFichas;
-	}
+        return numeroFichas;
+    }
+
+    private enum Estado {
+        ESTADO_SELECCION_FICHA, ESTADO_SELECCION_DESTINO, ESTADO_TERMINADO
+    }
 }

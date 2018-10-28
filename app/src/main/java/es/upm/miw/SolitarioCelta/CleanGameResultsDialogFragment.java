@@ -6,21 +6,22 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-public class AlertDialogFragment extends DialogFragment {
+public class CleanGameResultsDialogFragment extends DialogFragment {
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final MainActivity main = (MainActivity) getActivity();
+        final GameResultsActivity activity = (GameResultsActivity) getActivity();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder
-                .setTitle(R.string.txtDialogoFinalTitulo)
-                .setMessage(R.string.txtDialogoFinalPregunta)
+                .setTitle(R.string.cleanResultsButtonText)
+                .setMessage(R.string.cleanGameResultsDialogText)
                 .setPositiveButton(
                         getString(R.string.txtDialogoFinalAfirmativo),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                main.reiniciarTablero();
+                                activity.cleanGameResults();
                             }
                         }
                 )
@@ -29,7 +30,7 @@ public class AlertDialogFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                main.finish();
+
                             }
                         }
                 );

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import es.upm.miw.SolitarioCelta.db.AppDatabase;
 import es.upm.miw.SolitarioCelta.db.daos.GameResultDao;
@@ -81,6 +82,10 @@ public class GameRepository {
         return null;
     }
 
+    public boolean isSavedGameState() {
+        return loadGameState() != null;
+    }
+
     private String savedFilePath() {
         return context.getResources().getString(R.string.defaultSaveFile);
     }
@@ -88,7 +93,14 @@ public class GameRepository {
     public void save(GameResult gameResult) {
         Log.i(LOG_TAG, "Saving game result: " + gameResult);
         gameResultDao.save(gameResult);
-        Log.i(LOG_TAG, "Games results: \n" + gameResultDao.readAll());
+        Log.i(LOG_TAG, "Games results: \n" + readAll());
     }
 
+    public List<GameResult> readAll() {
+        return gameResultDao.readAll();
+    }
+
+    public void deleteAll() {
+        gameResultDao.deleteAll();
+    }
 }

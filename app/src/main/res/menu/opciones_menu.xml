@@ -4,35 +4,34 @@
 
     <item
         android:id="@+id/reinitialize"
-        android:icon="@android:drawable/stat_notify_sync"
-        android:iconTint="@android:color/background_dark"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:iconTint="@android:color/black"
         android:orderInCategory="100"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="@string/reinitializeText"/>
-
     <item
         android:id="@+id/save"
         android:icon="@android:drawable/ic_menu_save"
-        android:iconTint="@android:color/background_dark"
+        android:iconTint="@android:color/black"
         android:orderInCategory="110"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="@string/saveText"/>
-
     <item
         android:id="@+id/restore"
         android:orderInCategory="120"
         android:title="@string/restoreText"/>
-
+    <item
+        android:id="@+id/results"
+        android:orderInCategory="130"
+        android:title="@string/bestResultsText"/>
     <item
         android:id="@+id/preferences"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:iconTint="@android:color/background_dark"
         android:orderInCategory="200"
         android:title="@string/preferencesText"/>
     <item
         android:id="@+id/menuAbout"
         android:icon="@android:drawable/ic_menu_info_details"
-        android:iconTint="@android:color/background_dark"
         android:orderInCategory="300"
         android:title="@string/aboutText"/>
 
