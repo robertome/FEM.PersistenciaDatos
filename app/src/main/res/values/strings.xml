@@ -33,11 +33,11 @@
 
     <!-- Mejores Resultados -->
     <string name="bestResultsText">Mejores resultados</string>
-    <string name="bestResultsDialogText">¿Desea eliminar los resultados de las partidas?</string>
     <string name="tokensHeader">Fichas</string>
     <string name="dateHeader">Fecha</string>
     <string name="playerNameHeader">Jugador</string>
-
+    <string name="cleanResultsButtonText">Limpiar resultados</string>
+    <string name="cleanGameResultsDialogText">¿Desea eliminar los resultados de las partidas?</string>
 
     <string name="preferencesKeyPlayerName">KEY_PLAYER_NAME</string>
 

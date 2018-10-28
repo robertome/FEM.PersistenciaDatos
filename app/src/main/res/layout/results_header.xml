@@ -6,27 +6,27 @@
     android:orientation="horizontal">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="15"
+        android:layout_weight="20"
         android:background="@android:color/darker_gray"
         android:text="@string/tokensHeader"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="50"
-        android:background="@android:color/darker_gray"
-        android:text="@string/dateHeader"
-        android:textSize="24sp" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="45"
+        android:layout_weight="40"
         android:background="@android:color/darker_gray"
         android:text="@string/playerNameHeader"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="40"
+        android:background="@android:color/darker_gray"
+        android:text="@string/dateHeader"
+        android:textSize="20sp" />
 
 </LinearLayout>

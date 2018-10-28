@@ -3,39 +3,57 @@ package es.upm.miw.SolitarioCelta;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ListView;
-
-import es.upm.miw.SolitarioCelta.db.AppDatabase;
 
 public class GameResultsActivity extends AppCompatActivity {
 
+    private GameRepository gameRepository;
     private ListView resultsListView;
+    private GameResultsAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results);
 
         // Mostrar el icono back en la ActionBar
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        }*/
 
-        // Recupero el bundle con los datos
-        Bundle bundle = this.getIntent().getExtras();
-        if (bundle != null) {
-
-        }
+        gameRepository = new GameRepository(getApplicationContext());
 
         // asociar recurso a la vista
-        resultsListView = findViewById(R.id.resultsListView);
-        resultsListView.addHeaderView(getLayoutInflater().inflate(R.layout.results_header, null));
-        resultsListView.setAdapter(new GameResultsAdapter(
+        adapter = new GameResultsAdapter(
                 this,
                 R.layout.results_item,
-                AppDatabase.getDatabase(getApplicationContext()).gameResultDao().readAll()));
+                gameRepository.readAll());
+        resultsListView = findViewById(R.id.resultsListView);
+        //resultsListView.addHeaderView(getLayoutInflater().inflate(R.layout.results_header, null));
+        resultsListView.setAdapter(adapter);
+
+        View cleanResultsButton = findViewById(R.id.cleanResultsButton);
+        cleanResultsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!adapter.isEmpty()) {
+                    showCleanResultsDialog();
+                }
+            }
+        });
 
         setResult(RESULT_OK);
     }
+
+    private void showCleanResultsDialog() {
+        new CleanGameResultsDialogFragment().show(getFragmentManager(), "CLEAN GAME RESULTS DIALOG");
+    }
+
+    public void cleanGameResults() {
+        gameRepository.deleteAll();
+        adapter.refresh(null);
+    }
+
 }
